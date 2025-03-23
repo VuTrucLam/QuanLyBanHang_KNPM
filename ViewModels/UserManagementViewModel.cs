@@ -41,14 +41,24 @@ namespace QuanLyBanHang.ViewModels
 
         private void AddUser(object obj)
         {
+            //var newUser = new UserModel();
+            //var form = new UserFormView(newUser);
+            //if (form.ShowDialog() == true)
+            //{
+            //    newUser.Id = _nextId++;
+            //    Users.Add(newUser);
+            //    _userRepository.AddUser(newUser);
+
+            //}
             var newUser = new UserModel();
             var form = new UserFormView(newUser);
+            form.Owner = Application.Current.MainWindow; // Gán Owner cho an toàn
+
             if (form.ShowDialog() == true)
             {
-                newUser.Id = _nextId++;
-                Users.Add(newUser);
-                _userRepository.AddUser(newUser);
-
+                // Reload danh sách sau khi thêm
+                
+                LoadUsers();
             }
         }
 
@@ -108,6 +118,17 @@ namespace QuanLyBanHang.ViewModels
             Users.Add(new UserModel { Id = 2, TaiKhoan = "user", MatKhau = "321", HoTen = "Trần Thị B", VaiTro = "Nhân viên", Email = "b@email.com", SoDienThoai = "0987654321", DiaChi = "HCM", GioiTinh = "Nữ" });
             _nextId = Users.Max(u => u.Id) + 1;
         }
+        private void LoadUsers()
+        {
+            //Users.Clear();
+            var userList = _userRepository.GetAllUsers();
+            foreach (var user in userList)
+            {
+                Users.Add(user);
+            }
+        }
+
+
 
         private void DeleteUser(object obj)
         {

@@ -96,7 +96,7 @@ namespace QuanLyBanHang.ViewModels
             }
 
             // 4. Lưu vào CSDL
-            if (User.Id == 0)
+            if (User.Id != 0)
             {
                 _userRepository.AddUser(User);
             }

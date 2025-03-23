@@ -11,12 +11,25 @@ namespace QuanLyBanHang.Views
     /// </summary>
     public partial class UserFormView : Window
     {
-        public UserFormView(UserModel user = null)
+        //public UserFormView(UserModel user = null)
+        //{
+        //    InitializeComponent();
+        //    var vm = new UserFormViewModel(user);
+        //    vm.CloseAction = new Action(this.Close);  // ✅ Gán Action đúng cách
+        //    this.DataContext = vm;
+        //}
+        public UserFormView(UserModel user)
         {
             InitializeComponent();
-            var vm = new UserFormViewModel(user);
-            vm.CloseAction = new Action(this.Close);  // ✅ Gán Action đúng cách
-            this.DataContext = vm;
+
+            var viewModel = new UserFormViewModel(user);
+            viewModel.CloseAction = () =>
+            {
+                // Đóng form đúng cách
+                this.DialogResult = true;
+            };
+
+            this.DataContext = viewModel;
         }
 
         private void ChonAnh_Click(object sender, RoutedEventArgs e)
