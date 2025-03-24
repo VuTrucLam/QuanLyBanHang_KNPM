@@ -6,18 +6,10 @@ using QuanLyBanHang.ViewModels;
 
 namespace QuanLyBanHang.Views
 {
-    /// <summary>
-    /// Interaction logic for UserFormView.xaml
-    /// </summary>
     public partial class UserFormView : Window
     {
-        //public UserFormView(UserModel user = null)
-        //{
-        //    InitializeComponent();
-        //    var vm = new UserFormViewModel(user);
-        //    vm.CloseAction = new Action(this.Close);  // ✅ Gán Action đúng cách
-        //    this.DataContext = vm;
-        //}
+        public UserModel UserData { get; private set; }
+
         public UserFormView(UserModel user)
         {
             InitializeComponent();
@@ -25,8 +17,8 @@ namespace QuanLyBanHang.Views
             var viewModel = new UserFormViewModel(user);
             viewModel.CloseAction = () =>
             {
-                // Đóng form đúng cách
-                this.DialogResult = true;
+                this.DialogResult = true; // Đặt DialogResult thành true khi lưu thành công
+                this.Close();
             };
 
             this.DataContext = viewModel;
@@ -39,13 +31,14 @@ namespace QuanLyBanHang.Views
 
             if (openFileDialog.ShowDialog() == true)
             {
-                var vm = DataContext as UserFormViewModel; // ✅ Sửa đúng tên ViewModel
+                var vm = DataContext as UserFormViewModel;
                 if (vm != null)
                 {
                     vm.HinhAnh = openFileDialog.FileName;
                 }
             }
         }
+
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (DataContext is UserFormViewModel viewModel)
@@ -54,10 +47,19 @@ namespace QuanLyBanHang.Views
             }
         }
 
-
         private void Huy_Click(object sender, RoutedEventArgs e)
         {
-            this.Close(); // Đóng form khi nhấn Huỷ
+            this.DialogResult = false; // Đặt DialogResult thành false khi hủy
+            this.Close();
+        }
+
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is UserFormViewModel viewModel)
+            {
+                // Gọi SaveUser thông qua Command
+                viewModel.SaveCommand.Execute(null);
+            }
         }
     }
 }

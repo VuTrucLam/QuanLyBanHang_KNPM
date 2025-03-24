@@ -53,28 +53,28 @@ namespace QuanLyBanHang.ViewModels
             set
             {
                 _hinhAnh = value;
-                User.HinhAnhPath = value; // Sửa từ HinhAnh thành HinhAnhPath
+                User.HinhAnhPath = value;
                 OnPropertyChanged(nameof(HinhAnh));
             }
         }
+
+        public List<string> GioiTinhList { get; set; } = new List<string> { "Nam", "Nữ" };
+
+        public List<string> VaiTroList { get; set; } = new List<string>
+        {
+            "Quản lý",
+            "Bán hàng",
+            "Khách hàng",
+            "Nhà cung cấp",
+            "Quản lý kho"
+        };
 
         public UserFormViewModel(UserModel user = null)
         {
             try
             {
                 _userRepository = new UserRepository();
-                User = user != null ? new UserModel
-                {
-                    Id = user.Id,
-                    HoTen = user.HoTen,
-                    Email = user.Email,
-                    SoDienThoai = user.SoDienThoai,
-                    TaiKhoan = user.TaiKhoan,
-                    VaiTro = user.VaiTro,
-                    GioiTinh = user.GioiTinh,
-                    DiaChi = user.DiaChi,
-                    HinhAnhPath = user.HinhAnhPath
-                } : new UserModel();
+                User = user ?? new UserModel();
 
                 ExistingUsers = new ObservableCollection<UserModel>();
                 var users = _userRepository.GetAllUsers();
@@ -95,61 +95,62 @@ namespace QuanLyBanHang.ViewModels
                 throw;
             }
         }
-        public List<string> GioiTinhList { get; set; } = new List<string> { "Nam", "Nữ" };
-
-        public List<string> VaiTroList { get; set; } = new List<string>
-        {
-            "Quản lý",
-            "Bán hàng",
-            "Khách hàng",
-            "Nhà cung cấp",
-            "Quản lý kho"
-        };
-
 
         private void SaveUser(object obj)
         {
-            
+            try
             {
                 // Kiểm tra dữ liệu bắt buộc
-                //if (string.IsNullOrWhiteSpace(User.HoTen) || string.IsNullOrWhiteSpace(User.TaiKhoan) || string.IsNullOrWhiteSpace(User.MatKhau))
-                //{
-                //    MessageBox.Show("Vui lòng nhập đầy đủ Họ tên, Tên đăng nhập và Mật khẩu.");
-                //    return;
-                //}
-
-                if (string.IsNullOrWhiteSpace(User.Email) || string.IsNullOrWhiteSpace(User.SoDienThoai))
+                if (string.IsNullOrWhiteSpace(User.HoTen))
                 {
-                    MessageBox.Show("Vui lòng nhập đầy đủ Email và Số điện thoại.");
+                    MessageBox.Show("Họ tên không được để trống.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(User.TaiKhoan))
+                {
+                    MessageBox.Show("Tên đăng nhập không được để trống.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(User.MatKhau))
+                {
+                    MessageBox.Show("Mật khẩu không được để trống.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(User.Email))
+                {
+                    MessageBox.Show("Email không được để trống.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(User.SoDienThoai))
+                {
+                    MessageBox.Show("Số điện thoại không được để trống.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
                 // Kiểm tra trùng Email
                 if (IsDuplicateEmail(User.Email))
                 {
-                    MessageBox.Show("Email đã tồn tại. Vui lòng nhập email khác.");
+                    MessageBox.Show("Email đã tồn tại. Vui lòng nhập email khác.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
                 // Kiểm tra trùng SĐT
                 if (IsDuplicatePhone(User.SoDienThoai))
                 {
-                    MessageBox.Show("Số điện thoại đã tồn tại. Vui lòng nhập số khác.");
+                    MessageBox.Show("Số điện thoại đã tồn tại. Vui lòng nhập số khác.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
-                // Lưu vào CSDL
-                if (User.Id == 0)
-                {
-                    _userRepository.AddUser(User);
-                }
-                else
-                {
-                    _userRepository.UpdateUser(User);
-                }
-
-                MessageBox.Show("Lưu người dùng thành công!");
+                // Đóng form nếu dữ liệu hợp lệ
                 CloseAction?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi kiểm tra dữ liệu: {ex.Message}\n\nStackTrace: {ex.StackTrace}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

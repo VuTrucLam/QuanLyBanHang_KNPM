@@ -10,7 +10,14 @@ namespace QuanLyBanHang.Repositories
     {
         public void AddUser(UserModel user)
         {
-            
+            try
+            {
+                // Kiểm tra dữ liệu bắt buộc
+                if (string.IsNullOrWhiteSpace(user.HoTen) || string.IsNullOrWhiteSpace(user.TaiKhoan) || string.IsNullOrWhiteSpace(user.MatKhau))
+                {
+                    throw new ArgumentException("Họ tên, Tên đăng nhập và Mật khẩu không được để trống.");
+                }
+
                 using (var connection = DatabaseHelper.GetConnection())
                 {
                     connection.Open();
@@ -31,8 +38,11 @@ namespace QuanLyBanHang.Repositories
                         command.ExecuteNonQuery();
                     }
                 }
-            
-           
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Lỗi khi thêm người dùng vào cơ sở dữ liệu: {ex.Message}", ex);
+            }
         }
 
         public List<UserModel> GetAllUsers()
@@ -61,7 +71,7 @@ namespace QuanLyBanHang.Repositories
                                     SoDienThoai = reader["SoDienThoai"].ToString(),
                                     DiaChi = reader["DiaChi"].ToString(),
                                     GioiTinh = reader["GioiTinh"].ToString(),
-                                    HinhAnhPath = reader["HinhAnhPath"].ToString() // Sửa từ HinhAnh thành HinhAnhPath
+                                    HinhAnhPath = reader["HinhAnhPath"].ToString()
                                 });
                             }
                         }
@@ -75,22 +85,33 @@ namespace QuanLyBanHang.Repositories
             }
         }
 
-        public void UpdateUser(UserModel user)
+        public bool UpdateUser(UserModel user)
         {
             try
             {
+                // Kiểm tra dữ liệu bắt buộc
+                if (string.IsNullOrWhiteSpace(user.HoTen) || string.IsNullOrWhiteSpace(user.TaiKhoan) || string.IsNullOrWhiteSpace(user.MatKhau))
+                {
+                    throw new ArgumentException("Họ tên, Tên đăng nhập và Mật khẩu không được để trống.");
+                }
+
                 using (var connection = DatabaseHelper.GetConnection())
                 {
                     connection.Open();
                     string query = @"
                         UPDATE Users
-                        SET HoTen = @HoTen, TaiKhoan = @TaiKhoan, MatKhau = @MatKhau, VaiTro = @VaiTro,
-                            Email = @Email, SoDienThoai = @SoDienThoai, DiaChi = @DiaChi, GioiTinh = @GioiTinh,
+                        SET HoTen = @HoTen,
+                            TaiKhoan = @TaiKhoan,
+                            MatKhau = @MatKhau,
+                            VaiTro = @VaiTro,
+                            Email = @Email,
+                            SoDienThoai = @SoDienThoai,
+                            DiaChi = @DiaChi,
+                            GioiTinh = @GioiTinh,
                             HinhAnhPath = @HinhAnhPath
                         WHERE Id = @Id";
                     using (var command = new SQLiteCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@Id", user.Id);
                         command.Parameters.AddWithValue("@HoTen", user.HoTen);
                         command.Parameters.AddWithValue("@TaiKhoan", user.TaiKhoan);
                         command.Parameters.AddWithValue("@MatKhau", user.MatKhau);
@@ -100,7 +121,10 @@ namespace QuanLyBanHang.Repositories
                         command.Parameters.AddWithValue("@DiaChi", user.DiaChi);
                         command.Parameters.AddWithValue("@GioiTinh", user.GioiTinh);
                         command.Parameters.AddWithValue("@HinhAnhPath", user.HinhAnhPath);
-                        command.ExecuteNonQuery();
+                        command.Parameters.AddWithValue("@Id", user.Id);
+
+                        int rowsAffected = command.ExecuteNonQuery();
+                        return rowsAffected > 0; // Trả về true nếu có bản ghi được cập nhật
                     }
                 }
             }

@@ -42,7 +42,7 @@ namespace QuanLyBanHang.DataAccess
                         HoTen TEXT NULL,
                         GioiTinh TEXT,
                         TaiKhoan TEXT NOT NULL,
-                        MatKhau TEXT NULL,
+                        MatKhau TEXT NOT NULL,
                         Email TEXT UNIQUE,
                         SoDienThoai TEXT UNIQUE,
                         VaiTro TEXT,
