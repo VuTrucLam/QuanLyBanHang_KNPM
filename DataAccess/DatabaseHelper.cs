@@ -39,10 +39,10 @@ namespace QuanLyBanHang.DataAccess
                 string sql = @"
                     CREATE TABLE IF NOT EXISTS Users (
                         Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        HoTen TEXT NOT NULL,
+                        HoTen TEXT NULL,
                         GioiTinh TEXT,
                         TaiKhoan TEXT NOT NULL,
-                        MatKhau TEXT NOT NULL,
+                        MatKhau TEXT NULL,
                         Email TEXT UNIQUE,
                         SoDienThoai TEXT UNIQUE,
                         VaiTro TEXT,

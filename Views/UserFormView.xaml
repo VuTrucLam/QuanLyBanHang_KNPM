@@ -37,35 +37,37 @@
             <TextBlock Text="Họ tên:" Grid.Row="0" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
             <TextBox Text="{Binding User.HoTen, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" Margin="5" Padding="5"/>
 
+            <!-- GIỚI TÍNH -->
             <TextBlock Text="Giới tính:" Grid.Row="1" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
-            <ComboBox SelectedItem="{Binding User.GioiTinh, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="5" Padding="5">
-                <ComboBoxItem Content="Nam" />
-                <ComboBoxItem Content="Nữ" />
-            </ComboBox>
+            <ComboBox ItemsSource="{Binding GioiTinhList}" 
+                      SelectedItem="{Binding User.GioiTinh, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                      Grid.Row="1" Grid.Column="1" Margin="5" Padding="5"/>
+
 
             <TextBlock Text="Tên đăng nhập:" Grid.Row="2" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
             <TextBox Text="{Binding User.TaiKhoan, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Margin="5" Padding="5"/>
 
-            <TextBlock Text="Email:" Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
-            <TextBox Text="{Binding User.Email, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Margin="5" Padding="5"/>
+            <TextBlock Text="Email:" Grid.Row="4" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding User.Email, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1" Margin="5" Padding="5"/>
 
-            <TextBlock Text="Số điện thoại:" Grid.Row="4" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
-            <TextBox Text="{Binding User.SoDienThoai, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1" Margin="5" Padding="5"/>
+            <TextBlock Text="Số điện thoại:" Grid.Row="5" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding User.SoDienThoai, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="1" Margin="5" Padding="5"/>
 
-            <TextBlock Text="Vai trò:" Grid.Row="5" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
-            <ComboBox SelectedItem="{Binding User.VaiTro, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="1" Margin="5" Padding="5">
-                <ComboBoxItem Content="Quản lý"/>
-                <ComboBoxItem Content="Bán hàng"/>
-                <ComboBoxItem Content="Khách hàng"/>
-                <ComboBoxItem Content="Nhà cung cấp"/>
-                <ComboBoxItem Content="Quản lý kho"/>
-            </ComboBox>
+            <!-- VAI TRÒ -->
+            <TextBlock Text="Vai trò:" Grid.Row="6" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
+            <ComboBox ItemsSource="{Binding VaiTroList}" 
+                      SelectedItem="{Binding User.VaiTro, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                      Grid.Row="6" Grid.Column="1" Margin="5" Padding="5"/>
 
-            <TextBlock Text="Địa chỉ:" Grid.Row="6" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
-            <TextBox Text="{Binding User.DiaChi, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1" Margin="5" Padding="5"/>
+            <TextBlock Text="Mật khẩu:" Grid.Row="3" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
+            <PasswordBox x:Name="PasswordBox" Grid.Row="3" Grid.Column="1" Margin="5" Padding="5" PasswordChanged="PasswordBox_PasswordChanged"/>
 
-            <TextBlock Text="Hình ảnh:" Grid.Row="7" Grid.Column="0" Margin="5" VerticalAlignment="Top"/>
-            <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.Column="1" Margin="5">
+
+            <TextBlock Text="Địa chỉ:" Grid.Row="7" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding User.DiaChi, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="1" Margin="5" Padding="5"/>
+
+            <TextBlock Text="Hình ảnh:" Grid.Row="8" Grid.Column="0" Margin="5" VerticalAlignment="Top"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="8" Grid.Column="1" Margin="5">
                 <Image Source="{Binding User.ImagePath}" Width="100" Height="100" Stretch="UniformToFill" Margin="5" />
                 <Button Content="Chọn ảnh" Click="ChonAnh_Click" Margin="5" Padding="10,5"/>
             </StackPanel>

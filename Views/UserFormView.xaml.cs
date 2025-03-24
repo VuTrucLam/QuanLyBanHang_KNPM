@@ -46,6 +46,14 @@ namespace QuanLyBanHang.Views
                 }
             }
         }
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is UserFormViewModel viewModel)
+            {
+                viewModel.User.MatKhau = PasswordBox.Password;
+            }
+        }
+
 
         private void Huy_Click(object sender, RoutedEventArgs e)
         {
