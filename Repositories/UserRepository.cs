@@ -12,7 +12,6 @@ namespace QuanLyBanHang.Repositories
         {
             try
             {
-                // Kiểm tra dữ liệu bắt buộc
                 if (string.IsNullOrWhiteSpace(user.HoTen) || string.IsNullOrWhiteSpace(user.TaiKhoan) || string.IsNullOrWhiteSpace(user.MatKhau))
                 {
                     throw new ArgumentException("Họ tên, Tên đăng nhập và Mật khẩu không được để trống.");
@@ -34,7 +33,7 @@ namespace QuanLyBanHang.Repositories
                         command.Parameters.AddWithValue("@SoDienThoai", user.SoDienThoai);
                         command.Parameters.AddWithValue("@DiaChi", user.DiaChi);
                         command.Parameters.AddWithValue("@GioiTinh", user.GioiTinh);
-                        command.Parameters.AddWithValue("@HinhAnhPath", user.HinhAnhPath);
+                        command.Parameters.AddWithValue("@HinhAnhPath", user.HinhAnhPath ?? (object)DBNull.Value); // Xử lý null
                         command.ExecuteNonQuery();
                     }
                 }
@@ -89,7 +88,6 @@ namespace QuanLyBanHang.Repositories
         {
             try
             {
-                // Kiểm tra dữ liệu bắt buộc
                 if (string.IsNullOrWhiteSpace(user.HoTen) || string.IsNullOrWhiteSpace(user.TaiKhoan) || string.IsNullOrWhiteSpace(user.MatKhau))
                 {
                     throw new ArgumentException("Họ tên, Tên đăng nhập và Mật khẩu không được để trống.");
@@ -120,11 +118,11 @@ namespace QuanLyBanHang.Repositories
                         command.Parameters.AddWithValue("@SoDienThoai", user.SoDienThoai);
                         command.Parameters.AddWithValue("@DiaChi", user.DiaChi);
                         command.Parameters.AddWithValue("@GioiTinh", user.GioiTinh);
-                        command.Parameters.AddWithValue("@HinhAnhPath", user.HinhAnhPath);
+                        command.Parameters.AddWithValue("@HinhAnhPath", user.HinhAnhPath ?? (object)DBNull.Value);
                         command.Parameters.AddWithValue("@Id", user.Id);
 
                         int rowsAffected = command.ExecuteNonQuery();
-                        return rowsAffected > 0; // Trả về true nếu có bản ghi được cập nhật
+                        return rowsAffected > 0;
                     }
                 }
             }
